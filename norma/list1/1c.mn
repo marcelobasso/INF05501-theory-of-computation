@@ -1,0 +1,5 @@
+// --------------------------------------------------------
+// (c) f(x) = 
+        1, se é multiplo de 2
+        2, se não é multiplo de 2 mas é multiplo de 3
+        0, caso contrario (nem de dois, nem de 3)
