@@ -1,5 +1,49 @@
-// http://www.inf.ufrgs.br/~rma/simuladores/norma.html
-// https://moodle.ufrgs.br/pluginfile.php/6710764/mod_resource/content/4/Trabalhos_teoria_da_computa%C3%A7%C3%A3o_2024_1.pdf
-
-// --------------------------------------------------------
 // (a) f(x) = x² + 3x
+
+// limpa variável
+operation clear(A) {
+    1: if zero A then goto 0 else goto 2
+    2: do dec A goto 1
+}
+
+// A = A + B usando C
+operation soma(A, B) {
+    1: if zero B then goto 5 else goto 2
+    2: do dec B goto 3
+    3: do inc A goto 4
+    4: do inc C goto 1
+    5: if zero C then goto 0 else goto 6
+    6: do dec C goto 7
+    7: do inc B goto 5
+}
+
+// A = B usando C
+operation load(A, B) {
+    1: do clear(A) goto 2
+    2: do soma(A, B) goto 0
+}
+
+// B = A * 3 usando C e D
+operation mult3(A, B) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto 0 else goto 3
+    3: do dec D goto 4
+    4: do add B 3 goto 2
+}
+
+// B = A^2 usando C e D
+operation sqr(A, B) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto 0 else goto 3
+    3: do soma(B, A) goto 4
+    4: do dec D goto 2
+}
+
+main {
+    1: do mult3(X, B) goto 2
+    2: do soma(Y, B) goto 3
+    3: do clear(B) goto 4
+    4: do sqr(X, B) goto 5
+    5: do soma(Y, B) goto 6
+    6: do clear(B) goto 0
+}

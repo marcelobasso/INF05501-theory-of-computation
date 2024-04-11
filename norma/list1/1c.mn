@@ -1,5 +1,65 @@
-// --------------------------------------------------------
 // (c) f(x) = 
-        1, se é multiplo de 2
-        2, se não é multiplo de 2 mas é multiplo de 3
-        0, caso contrario (nem de dois, nem de 3)
+//        1, se é multiplo de 2
+//        2, se não é multiplo de 2 mas é multiplo de 3
+//        0, caso contrario (nem de dois, nem de 3)
+
+// limpa variável
+operation clear(A) {
+    1: if zero A then goto 0 else goto 2
+    2: do dec A goto 1
+}
+
+// A = A + B usando C
+operation soma(A, B) {
+    1: if zero B then goto 5 else goto 2
+    2: do dec B goto 3
+    3: do inc A goto 4
+    4: do inc C goto 1
+    5: if zero C then goto 0 else goto 6
+    6: do dec C goto 7
+    7: do inc B goto 5
+}
+
+// A = B usando C
+operation load(A, B) {
+    1: do clear(A) goto 2
+    2: do soma(A, B) goto 0
+}
+
+// A divisivel_por_2 usando D (teste se multiplo de 2)
+test divBy2(A) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto true else goto 3
+    3: do dec D goto 4
+    4: if zero D then goto false else goto 5
+    5: do dec D goto 2
+}
+
+// A divisivel_por_3 usando D (teste se múltiplo de 3)
+test divBy3(A) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto true else goto 3
+    3: do dec D goto 4
+    4: if zero D then goto false else goto 5
+    5: do dec D goto 6
+    6: if zero D then goto false else goto 7
+    7: do dec D goto 2
+}
+
+operation return1(A) {
+    1: do clear(A) goto 2
+    2: do inc A goto 0
+}
+
+operation return2(A) {
+    1: do clear(A) goto 2
+    2: do add A 2 goto 0
+}
+
+main {
+    1: if divBy2(X) then goto 2 else goto 3
+    2: do return1(Y) goto 0
+    3: if divBy3(X) then goto 4 else goto 5
+    4: do return2(Y) goto 0
+    5: do clear(Y) goto 0 
+}
