@@ -24,9 +24,14 @@ operation load(A, B) {
     2: do soma(A, B) goto 0
 }
 
-// B = A * B
+// B = A * B usando E e D (nao é possivel usar C pois ele e usado no load)
 operation mult(A, B) {
-
+    1: do load(E, B) goto 2
+    2: do load(D, A) goto 3
+    3: do dec D goto 4
+    4: if zero D then goto 6 else goto 5
+    5: do soma(B, E) goto 3
+    6: do clear(E) goto 0
 }
 
 // A!! usando B
@@ -34,5 +39,12 @@ operation double_factorial(A, B) {
     1: do load(B, A) goto 2
     2: if zero A then goto 0 else goto 3
     3: do sub A 2 goto 4
-    4: do mult(B, A) goto 2
+    4: do mult(A, B) goto 2
+}
+
+main {
+    1: do load(Y, X) goto 2
+    2: do double_factorial(Y, B) goto 3
+    3: do load(Y, B) goto 4
+    4: do clear(B) goto 0
 }
