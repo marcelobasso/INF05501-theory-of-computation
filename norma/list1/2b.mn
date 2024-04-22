@@ -1,0 +1,129 @@
+
+operation clear(A) {
+    1: if zero A then goto 0 else goto 2
+    2: do dec A goto 1
+}
+// A = A + B usando C
+operation soma(A, B) {
+    1: if zero B then goto 5 else goto 2
+    2: do dec B goto 3
+    3: do inc A goto 4
+    4: do inc C goto 1
+    5: if zero C then goto 0 else goto 6
+    6: do dec C goto 7
+    7: do inc B goto 5
+}
+operation subR(A,B){
+	1: do clear(K) goto 13
+	2: do dec B goto 3
+	3: do dec A goto 4
+	4: do inc K goto 5
+	5: if zero B then goto 9 else goto 6 
+	6: if zero A then goto 7 else goto 2
+     	7: do soma(A,K) goto 8
+	8: do clear(I) goto 12
+	9: do soma(B,K) goto 10
+	10: do dec I goto 11
+	11: do inc I goto 0
+        12: do soma(B,K) goto 0
+	13: if zero A then goto 8 else goto 2
+}
+// A = B usando C
+operation load(A, B) {
+    1: do clear(A) goto 2
+    2: do soma(A, B) goto 0
+}
+// B = A^2 usando C e D
+operation sqr(A, B) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto 0 else goto 3
+    3: do soma(B, A) goto 4
+    4: do dec D goto 2
+}
+// B = A * 3 usando C e D
+operation mult3(A, B) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto 0 else goto 3
+    3: do dec D goto 4
+    4: do add B 3 goto 2
+}
+test divBy2(A) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto true else goto 3
+    3: do dec D goto 4
+    4: if zero D then goto false else goto 5
+    5: do dec D goto 2
+}
+test divBy3(A) {
+    1: do load(D, A) goto 2
+    2: if zero D then goto true else goto 3
+    3: do dec D goto 4
+    4: if zero D then goto false else goto 5
+    5: do dec D goto 6
+    6: if zero D then goto false else goto 7
+    7: do dec D goto 2
+}
+// A=A/2
+operation div2(A){
+ 	1: if zero A then goto 4 else goto 2
+	2: do sub A 2 goto 3
+ 	3: do inc N goto 1
+        4: do load(A,N) goto 5
+	5: do clear(N) goto 0
+}
+operation div3(A){
+        1: if zero A then goto 4 else goto 2
+	2: do sub A 3 goto 3
+ 	3: do inc N goto 1
+        4: do load(A,N) goto 5
+	5: do clear(N) goto 0
+}
+operation div(A,B){
+	1: do subR(A,B) goto 2
+	2: if zero I then goto 4 else goto 3
+	3: do inc Q goto 1
+	4: do load(R,A) goto 0
+}
+operation mult(A,B){
+	1: do clear(M) goto 2
+	2: do load(MM,B) goto 3
+	3: do soma(M,A) goto 4
+	4: do dec MM goto 5
+	5: if zero MM then goto 6 else goto 3
+	6: do load(A,M) goto 0
+}
+operation exp(A,B){
+	1: do load(POT, A) goto 2
+	2: do dec B goto 3 
+	3: if zero B then goto 0 else goto 4
+	4: do mult(A,POT) goto 2
+	
+}
+main{
+   	1: do dec X goto 2 
+    	2: if zero X then goto 25 else goto 3
+    	3: do inc X goto 4
+    	4: if divBy2(X) then goto 5 else goto 24
+    	5: do div2(X) goto 6
+   	6: do inc A goto 1
+   	7: do dec X goto 8
+   	8: if zero X then goto 25 else goto 9
+   	9: do inc X goto 10 
+    	10: if divBy3(X) then goto 11 else goto 25
+    	11: do div3(X) goto 12
+    	12: do inc B goto 7
+    	13: do div(A,B) goto 14
+	14: if zero R then goto 22 else goto 15
+	15: do add TRES 3 goto 16
+	16: do exp(TRES, R) goto 17
+	17: if zero Q then goto 23 else goto 18
+	18: do add DOIS 2 goto 19
+	19: do exp(DOIS, Q) goto 20
+	20: do mult(DOIS, TRES) goto 21
+	21: do load(Y,DOIS) goto 0
+	22: do inc TRES goto 17
+	23: do inc DOIS goto 20
+	24: if zero A then goto 26 else goto 7
+	25: if zero B then goto 26 else goto 13
+    	26: do inc Y goto 0
+}
