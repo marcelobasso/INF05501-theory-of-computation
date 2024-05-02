@@ -1,0 +1,36 @@
+let
+
+    true = \x y. x;
+    false = \x y. y;
+    if = \b. \e1. \e2. b e1 e2;
+    not = \b. if b false true;
+    and = \b1. \b2. if b1 b2 false;
+    or = \b1. \b2. if b1 true b2;
+
+    inc = \n. (\A. \B. A (n A B));
+    soma = \n1. \n2. (\A. \B. n1 A (n2 A B));
+    mult = \n1 n2. \A B. n1 (n2 A) B;
+    isZero = \n. n (\x. false) true;
+    exp = \n1. \n2. n2 n1;
+
+    pair = \A B. \c. c A B;
+    fst = \n. n true;
+    snd = \n. n false;
+    swap = \p. pair (snd p) (fst p);
+    shift_inc = \p. pair (snd p) (inc (snd p));
+    pred = \n. fst (n shift_inc (pair 0 0));
+    sub = \n1. \n2. n2 pred n1;
+    
+    empty = \x. true;
+    isEmpty = \i. i (\A B. false);
+    head = \p. fst p;
+    tail = \p. snd p;
+    cons = pair;
+
+    Y = \f. (\x. f (x x)) (\x. f (x x));
+
+    S_fat = \R. \x. if (isZero x) 1 (mult x (R (pred x)));
+    fact = Y S_fat;
+
+in
+    fact 2

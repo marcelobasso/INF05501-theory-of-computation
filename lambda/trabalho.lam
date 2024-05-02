@@ -1,0 +1,70 @@
+let
+
+    true = \x y. x;
+    false = \x y. y;
+    if = \b. \e1. \e2. b e1 e2;
+    not = \b. if b false true;
+    and = \b1. \b2. if b1 b2 false;
+    or = \b1. \b2. if b1 true b2;
+
+    inc = \n. (\A. \B. A (n A B));
+    add = \n1. \n2. (\A. \B. n1 A (n2 A B));
+    mult = \n1 n2. \A B. n1 (n2 A) B;
+    isZero = \n. n (\x. false) true;
+    exp = \n1. \n2. n2 n1;
+
+    pair = \A B. \c. c A B;
+    fst = \n. n true;
+    snd = \n. n false;
+    swap = \p. pair (snd p) (fst p);
+    shift_inc = \p. pair (snd p) (inc (snd p));
+    pred = \n. fst (n shift_inc (pair 0 0));
+    sub = \n1. \n2. n2 pred n1;
+    
+    empty = \x. true;
+    isEmpty = \i. i (\A B. false);
+    head = \p. fst p;
+    tail = \p. snd p;
+    cons = pair;
+
+    Y = \f. (\x. f (x x)) (\x. f (x x));
+
+    S_fat = \R. \x. if (isZero x) 1 (mult x (R (pred x)));
+    fact = Y S_fat;
+
+    igual = \a b. and (isZero (sub a b)) (isZero (sub b a));
+    menor = \x y. and (isZero(sub x y)) (not (igual x y));
+    S_mod = \R. \x y. if (menor x y) x (R (sub x y) y);
+    mod = Y S_mod;
+
+    pol = \a b. add (exp a 2) (mult b 3);
+
+    multTres = \n. isZero (mod n 3);
+
+    multFrac = \p1 p2. pair (mult (fst p1) (fst p2)) (mult (snd p1) (snd p2));
+
+    somaFrac = \p1 p2. pair (add (mult (fst p1) (snd p2)) (mult (snd p1) (fst p2))) 
+                            (mult (snd p1) (snd p2));
+
+    geraLista_S = \R. \n. if (isZero n) empty (cons n (R (pred n)));
+    geraLista = Y geraLista_S;
+
+    multLista_S = \R. \l. if (isEmpty l) 0 
+                        (if isEmpty (tail l) 
+                            (head l) 
+                            (mult (head l) (R (tail l))));
+    
+    multLista = Y multLista_S;
+
+    seq_S = \R. \n. if (isZero n)
+                2
+                (if (igual n 1) 
+                    5 
+                    (sub 
+                        (mult 3 (R (pred n))) 
+                        (mult 2 (R (pred (pred n))))));
+
+    seq = Y seq_S;
+
+in
+    multLista empty
